@@ -1,5 +1,6 @@
 import express from 'express';
 import rotasChamados from './routes/chamados.js';
+import rotasAddress from './routes/address.js';
 import cors from 'cors';
 
 const app = express();
@@ -27,6 +28,7 @@ app.get('/api', (req, res) => {
 
 /* Rotas da aplicação */
 app.use('/api/chamados', rotasChamados);
+app.use('/api/address', rotasAddress);
 
 // Tratando rotas inexistentes no backend
 app.use((req, res, next) => {
