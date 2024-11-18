@@ -1,0 +1,46 @@
+@baseURL = http://localhost:4000/api/chamados
+@chamado_id = 6519a3f08b7c9f28e05c6a17  // Exemplo de ID real gerado no MongoDB
+
+// GET - Lista todos os chamados
+GET {{baseURL}}
+Content-Type: application/json
+
+###
+// GET - Lista o chamado pelo ID
+GET {{baseURL}}/id/{{chamado_id}}
+Content-Type: application/json
+
+###
+// POST - Insere um novo chamado
+POST {{baseURL}}
+Content-Type: application/json
+
+{
+    "titulo": "Erro de conexão",
+    "descricao": "Usuário não consegue acessar a rede interna",
+    "prioridade": 1,
+    "valorEstimado": 350.75,
+    "status": "Aberto",
+    "responsavel": "João Silva",
+    "categoria": "Rede"
+}
+
+###
+// PUT - Altera um chamado existente
+PUT {{baseURL}}/{{chamado_id}}
+Content-Type: application/json
+
+{
+    "titulo": "Erro de conexão corrigido",
+    "descricao": "Problema de conexão foi resolvido",
+    "prioridade": 2,
+    "valorEstimado": 400.00,
+    "status": "Fechado",
+    "responsavel": "Carlos Souza",
+    "categoria": "Rede"
+}
+
+###
+// DELETE - Remove o chamado pelo ID
+DELETE {{baseURL}}/{{chamado_id}}
+Content-Type: application/json

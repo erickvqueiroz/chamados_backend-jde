@@ -1,0 +1,27 @@
+{
+  "name": "backend_chamados",
+  "version": "1.0.0",
+  "description": "Backend Node Chamados",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node api/index.js",
+    "dev": "nodemon api/index.js"
+  },
+  "keywords": [
+    "nodejs",
+    "express"
+  ],
+  "author": "Erick Queiroz",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "express-validator": "^7.2.0",
+    "mongodb": "^6.8.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
