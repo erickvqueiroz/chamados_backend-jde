@@ -1,5 +1,5 @@
-// Conectar ao banco de dados 'ferramentasChamados'
-use('ferramentasChamados');
+// Conectar ao banco de dados 'address'
+use('address');
 
 // Inserir um exemplo de usuário
 db.usuarios.insertOne({

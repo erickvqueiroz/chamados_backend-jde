@@ -4,7 +4,7 @@ import { check, validationResult } from 'express-validator';
 
 const uri = 'mongodb://localhost:27017';
 const client = new MongoClient(uri);
-const dbName = 'Address';
+const dbName = 'address';
 const router = express.Router();
 
 // Função para conectar ao banco de dados
@@ -27,6 +27,64 @@ const validaUsuario = [
     check('email').isEmail().withMessage('E-mail inválido'),
     check('password').isLength({ min: 6 }).withMessage('A senha deve ter no mínimo 6 caracteres')
 ];
+
+// POST: Login do usuário
+router.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+
+    try {
+        await connectToDatabase();
+        const db = client.db(dbName);
+        const usuarios = db.collection('usuarios');
+
+        // Verificar se o e-mail e senha correspondem a um usuário no banco
+        const usuario = await usuarios.findOne({ email, password });
+
+        if (!usuario) {
+            return res.status(400).json({ success: false, message: 'Credenciais incorretas!' });
+        }
+
+        res.status(200).json({ success: true, message: 'Login bem-sucedido' });
+    } catch (err) {
+        res.status(500).json({ "error": `${err.message}` });
+    }
+});
+
+// POST: Criar um novo usuário
+router.post('/', validaUsuario, async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    const { fullName, cpf, age, phone, address, email, password } = req.body;
+
+    try {
+        await connectToDatabase();
+        const db = client.db(dbName);
+        const usuarios = db.collection('usuarios');
+
+        // Verificar se o CPF já existe
+        const cpfExistente = await usuarios.findOne({ cpf });
+        if (cpfExistente) {
+            return res.status(400).json({ message: 'CPF já cadastrado' });
+        }
+
+        // Verificar se o e-mail já existe
+        const emailExistente = await usuarios.findOne({ email });
+        if (emailExistente) {
+            return res.status(400).json({ message: 'E-mail já cadastrado' });
+        }
+
+        const novoUsuario = { fullName, cpf, age, phone, address, email, password, dataCriacao: new Date() };
+        const result = await usuarios.insertOne(novoUsuario);
+
+        res.status(201).json({ message: 'Usuário cadastrado com sucesso', id: result.insertedId });
+    } catch (err) {
+        res.status(500).json({ "error": `${err.message}` });
+    }
+});
+
 
 // POST: Criar um novo usuário
 router.post('/', validaUsuario, async (req, res) => {
